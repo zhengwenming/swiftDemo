@@ -17,12 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-
-
-
+        self.window = UIWindow(frame:UIScreen.mainScreen().bounds)
+        self.window!.backgroundColor = UIColor.whiteColor()
+        let tabbar = WMTabbarController();
+        self.window!.rootViewController = tabbar;
         
-        
-        
+        self.window!.makeKeyAndVisible()
         return true
     }
 
