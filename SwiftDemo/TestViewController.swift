@@ -15,7 +15,7 @@ class TestViewController: BaseViewController,UINavigationControllerDelegate {
     }
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-//        self.hidesBottomBarWhenPushed = true
+
     }
     override func viewDidLoad() {
         super.viewDidLoad()

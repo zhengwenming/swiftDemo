@@ -30,9 +30,9 @@ class FriendViewController: BaseViewController,UITableViewDataSource,UITableView
         
         
         
-        friendsTable=UITableView(frame: self.view.bounds, style:.Plain)
-        friendsTable!.delegate=self
-        friendsTable!.dataSource=self
+        friendsTable = UITableView(frame: self.view.bounds, style:.Plain)
+        friendsTable!.delegate = self
+        friendsTable!.dataSource = self
         friendsTable!.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(friendsTable!)
 
