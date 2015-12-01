@@ -40,7 +40,7 @@ class WMTabbarController: UITabBarController {
                 friendNav.tabBarItem = friendItem;
 
                 let moneyNav = BaseNavgationController(rootViewController: moneyVC)
-                let moneyItem = UITabBarItem.init(title: "财富", image: UIImage.init(named: "TabBar_Assets"), selectedImage: UIImage.init(named: "TabBar_Assets_Sel"))
+                let moneyItem = UITabBarItem.init(title: "我的", image: UIImage.init(named: "TabBar_Assets"), selectedImage: UIImage.init(named: "TabBar_Assets_Sel"))
                 moneyNav.tabBarItem = moneyItem;
 
         self.viewControllers = [aliNav,reputationNav,friendNav,moneyNav];

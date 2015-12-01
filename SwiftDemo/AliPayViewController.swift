@@ -13,19 +13,19 @@ class AliPayViewController: BaseViewController {
     var topView:UIView?
     
     
-    func topButtonClick(sender : UIButton){
-        switch sender.tag{
-        case 0:
-            print("\(sender.tag)")
-        case 1:
-            print("\(sender.tag)")
-        case 2:
-            print("\(sender.tag)")
-        case 3:
-            print("\(sender.tag)")
-        default:
-            print("\(sender.tag)")
-        }
+    func topButtonClick(sender : UITapGestureRecognizer){
+//        switch sender.view?.tag{
+//        case 0:
+//            print("\(sender.view?.tag)")
+//        case 1:
+//            print("\(sender.view?.tag)")
+//        case 2:
+//            print("\(sender.view?.tag)")
+//        case 3:
+//            print("\(sender.view?.tag)")
+//        default:
+//            print("\(sender.view?.tag)")
+//        }
         
 
         
@@ -38,43 +38,34 @@ class AliPayViewController: BaseViewController {
             self.view.addSubview(tempTopView)
             return tempTopView
             }()
-        let btnWidth:CGFloat = (kScreenWidth/4)
+        let imageViewWidth:CGFloat = (kScreenWidth/4)
         for index:Int in 0...3{
-            var button = UIButton(type: .Custom)
-            button.tintColor = UIColor.whiteColor()
-            
+            let imageView = UIImageView()
+            imageView.tintColor = UIColor.whiteColor()
+            imageView.userInteractionEnabled = true
+            imageView.frame = CGRectMake(imageViewWidth * CGFloat(index), 0, imageViewWidth, (topView?.frame.size.height)!)
+            let titleLabel = UILabel(frame: CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y+(topView?.frame.size.height)!*2/3, imageViewWidth, 30))
             if index==0{
-                button.setImage(UIImage(named: "scan@2x.png"), forState: .Normal)
-                button.setImage(UIImage(named: "scan@2x.png"), forState: .Selected)
-                button.setTitle("扫一扫", forState: .Normal)
-                button.titleEdgeInsets = UIEdgeInsetsMake(-20, -18, -60, 0)
-                button.imageEdgeInsets = UIEdgeInsetsMake(-20, 18, 0, 0)
+                imageView.image = UIImage(named: "scan@2x.png")
+                titleLabel.text = "扫一扫"
             }else if index==1{
-                button.setImage(UIImage(named: "scanStatic@2x.png"), forState: .Normal)
-                button.setImage(UIImage(named: "scanStatic@2x.png"), forState: .Selected)
-                button.setTitle("付款", forState: .Normal)
-                button.titleEdgeInsets = UIEdgeInsetsMake(-20, -23, -60, 0)
-                button.imageEdgeInsets = UIEdgeInsetsMake(-20, 21, 0, 0)
+                imageView.image = UIImage(named: "scanStatic@2x.png")
+              titleLabel.text = "付款"
             }else if index==2{
-                button.setImage(UIImage(named: "scan@2x.png"), forState: .Normal)
-                button.setImage(UIImage(named: "scan@2x.png"), forState: .Selected)
-                button.setTitle("卡券", forState: .Normal)
-                button.titleEdgeInsets = UIEdgeInsetsMake(-20, -23, -60, 0)
-                button.imageEdgeInsets = UIEdgeInsetsMake(-20, 21, 0, 0)
-
+                imageView.image = UIImage(named: "scan@2x.png")
+                titleLabel.text = "卡券"
             }else if index==3{
-                button.setImage(UIImage(named: "scanStatic@2x.png"), forState: .Normal)
-                button.setImage(UIImage(named: "scanStatic@2x.png"), forState: .Selected)
-                button.setTitle("附近", forState: .Normal)
-                button.titleEdgeInsets = UIEdgeInsetsMake(-20, -23, -60, 0)
-                button.imageEdgeInsets = UIEdgeInsetsMake(-20, 21, 0, 0)
+                imageView.image = UIImage(named: "scanStatic@2x.png")
+                titleLabel.text = "附近"
             }
-            
-            button.frame = CGRectMake(btnWidth * CGFloat(index), 0, btnWidth, (topView?.frame.size.height)!)
-            button.tag = index
-            button.addTarget(self, action: "topButtonClick:", forControlEvents: UIControlEvents.TouchUpInside)
-            topView?.addSubview(button)
-            
+            titleLabel.textAlignment = NSTextAlignment.Center
+            titleLabel.textColor = UIColor.whiteColor()
+            imageView.tag = index
+            imageView.contentMode = UIViewContentMode.Center;
+          let tap = UITapGestureRecognizer(target: self, action: "topButtonClick:")
+            imageView .addGestureRecognizer(tap)
+            topView?.addSubview(imageView)
+            topView?.addSubview(titleLabel)
         }
  
     }
