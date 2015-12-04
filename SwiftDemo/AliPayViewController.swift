@@ -14,18 +14,28 @@ class AliPayViewController: BaseViewController {
     
     
     func topButtonClick(sender : UITapGestureRecognizer){
-//        switch sender.view?.tag{
-//        case 0:
-//            print("\(sender.view?.tag)")
-//        case 1:
-//            print("\(sender.view?.tag)")
-//        case 2:
-//            print("\(sender.view?.tag)")
-//        case 3:
-//            print("\(sender.view?.tag)")
-//        default:
-//            print("\(sender.view?.tag)")
-//        }
+        
+        let imageView:UIImageView = sender.view as! UIImageView
+        
+        
+        
+        switch imageView.tag{
+        case 0:
+
+        //MARK: 二维码
+        
+            let qrcodeVC:QRCodeScanViewController = QRCodeScanViewController()
+            
+            self.navigationController?.pushViewController(qrcodeVC, animated: true)
+        case 1:
+            print("\(sender.view?.tag)")
+        case 2:
+            print("\(sender.view?.tag)")
+        case 3:
+            print("\(sender.view?.tag)")
+        default:
+            print("\(sender.view?.tag)")
+        }
         
 
         

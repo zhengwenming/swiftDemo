@@ -15,26 +15,29 @@ import UIKit
 class ReputationViewController: BaseViewController {
 
     override func viewDidLoad() {
+        let leftButton = UIButton(type: UIButtonType.Custom)
+        leftButton.frame = CGRectMake(0, 0, 70, 40)
+        leftButton.setTitle("广州", forState: UIControlState.Normal)
+        leftButton.titleLabel?.font = UIFont.systemFontOfSize(15)
+        leftButton.addTarget(self, action: "changeCity:", forControlEvents: UIControlEvents.TouchUpInside)
+        leftButton.setImage(UIImage(named: "location"), forState: UIControlState.Normal)
+        leftButton.imageEdgeInsets = UIEdgeInsetsMake(0, -9, 0, 0)
+        leftButton.titleEdgeInsets = UIEdgeInsetsMake(0, 9, 0, 0)
 
-        
+        let leftButtonItem:UIBarButtonItem = UIBarButtonItem(customView: leftButton)
+        self.navigationItem.leftBarButtonItem = leftButtonItem
         super.viewDidLoad()
 
     }
 
+    func changeCity(sender:UIButton){
+        print("title = \(sender.currentTitle)")
+        let cityList =  CityListViewController();
+        self.navigationController?.pushViewController(cityList, animated: true)
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
-    */
 
 }
