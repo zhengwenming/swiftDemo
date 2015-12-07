@@ -194,7 +194,11 @@ public extension ImageDownloader {
         
         setupProgressBlock(progressBlock, completionHandler: completionHandler, forURL: request.URL!) {(session, fetchLoad) -> Void in
             let task = session.dataTaskWithRequest(request)
-            task.priority = options.lowPriority ? NSURLSessionTaskPriorityLow : NSURLSessionTaskPriorityDefault
+            if #available(iOS 8.0, *) {
+                task.priority = options.lowPriority ? NSURLSessionTaskPriorityLow : NSURLSessionTaskPriorityDefault
+            } else {
+                // Fallback on earlier versions
+            }
             task.resume()
             
             fetchLoad.shouldDecode = options.shouldDecode

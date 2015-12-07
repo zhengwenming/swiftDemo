@@ -206,15 +206,22 @@ extension QRCodeScanViewController: UINavigationControllerDelegate, UIImagePicke
         
         // 2.从选中的图片中读取二维码数据
         // 2.1创建一个探测器
-        let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyLow])
-        // 2.2利用探测器探测数据
-        let results = detector.featuresInImage(ciImage)
-        // 2.3取出探测到的数据
-        for result in results
-        {
-            print((result as! CIQRCodeFeature).messageString)
-            customLabel.text = (result as! CIQRCodeFeature).messageString
+        if #available(iOS 8.0, *) {
+            let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyLow])
+            
+            
+            // 2.2利用探测器探测数据
+            let results = detector.featuresInImage(ciImage)
+            // 2.3取出探测到的数据
+            for result in results
+            {
+                print((result as! CIQRCodeFeature).messageString)
+                customLabel.text = (result as! CIQRCodeFeature).messageString
+            }
+        } else {
+            // Fallback on earlier versions
         }
+        
         
         picker.dismissViewControllerAnimated(true) { () -> Void in
             self.startAnimation()

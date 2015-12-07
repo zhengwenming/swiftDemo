@@ -287,36 +287,40 @@ extension ImageCache {
             }
         } else {
             var sSelf: ImageCache! = self
-            block = dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS) {
-                
-                // Begin to load image from disk
-                dispatch_async(sSelf.ioQueue, { () -> Void in
-                    if let image = sSelf.retrieveImageInDiskCacheForKey(key, scale: options.scale) {
-                        if options.shouldDecode {
-                            dispatch_async(sSelf.processQueue, { () -> Void in
-                                let result = image.kf_decodedImage(scale: options.scale)
-                                sSelf.storeImage(result!, forKey: key, toDisk: false, completionHandler: nil)
-
+            if #available(iOS 8.0, *) {
+                block = dispatch_block_create(DISPATCH_BLOCK_INHERIT_QOS_CLASS) {
+                    
+                    // Begin to load image from disk
+                    dispatch_async(sSelf.ioQueue, { () -> Void in
+                        if let image = sSelf.retrieveImageInDiskCacheForKey(key, scale: options.scale) {
+                            if options.shouldDecode {
+                                dispatch_async(sSelf.processQueue, { () -> Void in
+                                    let result = image.kf_decodedImage(scale: options.scale)
+                                    sSelf.storeImage(result!, forKey: key, toDisk: false, completionHandler: nil)
+    
+                                    dispatch_async(options.queue, { () -> Void in
+                                        completionHandler(result, .Memory)
+                                        sSelf = nil
+                                    })
+                                })
+                            } else {
+                                sSelf.storeImage(image, forKey: key, toDisk: false, completionHandler: nil)
                                 dispatch_async(options.queue, { () -> Void in
-                                    completionHandler(result, .Memory)
+                                    completionHandler(image, .Disk)
                                     sSelf = nil
                                 })
-                            })
+                            }
                         } else {
-                            sSelf.storeImage(image, forKey: key, toDisk: false, completionHandler: nil)
+                            // No image found from either memory or disk
                             dispatch_async(options.queue, { () -> Void in
-                                completionHandler(image, .Disk)
+                                completionHandler(nil, nil)
                                 sSelf = nil
                             })
                         }
-                    } else {
-                        // No image found from either memory or disk
-                        dispatch_async(options.queue, { () -> Void in
-                            completionHandler(nil, nil)
-                            sSelf = nil
-                        })
-                    }
-                })
+                    })
+                }
+            } else {
+                // Fallback on earlier versions
             }
             
             dispatch_async(dispatch_get_main_queue(), block!)

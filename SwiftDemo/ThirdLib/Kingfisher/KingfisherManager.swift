@@ -48,7 +48,11 @@ public class RetrieveImageTask {
         // It fixed in Xcode 7.1.
         // See https://github.com/onevcat/Kingfisher/issues/99 for more.
         if let diskRetrieveTask = diskRetrieveTask {
-            dispatch_block_cancel(diskRetrieveTask)
+            if #available(iOS 8.0, *) {
+                dispatch_block_cancel(diskRetrieveTask)
+            } else {
+                // Fallback on earlier versions
+            }
         }
         
         if let downloadTask = downloadTask {
