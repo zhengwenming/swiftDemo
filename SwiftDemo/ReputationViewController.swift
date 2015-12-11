@@ -39,7 +39,6 @@ class ReputationViewController: BaseViewController,ChangeCity {
     }
     
     func changeCity(sender:UIButton){
-        print("title = \(sender.currentTitle)")
         let cityList =  CityListViewController();
         cityList.delegate = self
         self.navigationController?.pushViewController(cityList, animated: true)
