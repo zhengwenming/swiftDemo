@@ -10,12 +10,19 @@
 
 import UIKit
 
+///声明一个protocal，必须继承NSObjectProtocal
+
+protocol ChangeCity:NSObjectProtocol{
+    func ChangeCityWithCityName(cityName:String)
+}
+
+
 class CityListViewController: BaseViewController ,UITableViewDataSource,UITableViewDelegate{
 
     var friendsTable:UITableView?
     var cities:NSDictionary?
     var keys:[String]?
-    
+    weak var delegate:ChangeCity?
     
     func loadData(){
         let path:String  = NSBundle.mainBundle().pathForResource("citydict", ofType: "plist")!
@@ -90,6 +97,14 @@ class CityListViewController: BaseViewController ,UITableViewDataSource,UITableV
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let keysTemp:NSArray = NSArray(array: keys!);
+        
+        let key = keysTemp.objectAtIndex(indexPath.section)
+        
+        let temp:NSArray = (cities?.objectForKey(key))! as! NSArray
+        
+        self.delegate?.ChangeCityWithCityName(temp.objectAtIndex(indexPath.row) as! String)
+        self.navigationController?.popViewControllerAnimated(true)
         
     }
     override func didReceiveMemoryWarning() {
