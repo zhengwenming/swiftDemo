@@ -15,7 +15,7 @@ import CoreLocation
 
 ///声明一个protocal，必须继承NSObjectProtocal
 
-protocol ChangeCity:NSObjectProtocol{
+ protocol ChangeCity:NSObjectProtocol{
     func ChangeCityWithCityName(cityName:String)
 }
 
@@ -31,33 +31,33 @@ class CityListViewController: BaseViewController ,UITableViewDataSource,UITableV
     var currLocation : CLLocation!
 
     func loadData(){
-        let path:String  = NSBundle.mainBundle().pathForResource("citydict", ofType: "plist")!
+        let path:String  = Bundle.main.path(forResource: "citydict", ofType: "plist")!
         cities = NSDictionary(contentsOfFile: path)
         
     
         let allkeys = cities!.allKeys as NSArray;
-        let sortedStates = allkeys.sortedArrayUsingSelector(Selector("compare:"));
+        let sortedStates = allkeys.sortedArray(using: #selector(NSNumber.compare(_:)));
         keys = sortedStates as? Array<String>;
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         locationManager.startUpdatingLocation()
     }
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         locationManager.stopUpdatingLocation()
     }
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
       currLocation = locations.last! as CLLocation
 //        longitudeTxt.text = "\(currLocation.coordinate.longitude)"
 //        latitudeTxt.text = "\(currLocation.coordinate.latitude)"
 //        HeightTxt.text = "\(currLocation.altitude)"
-        self.reverseGeocode(currLocation)
+        self.reverseGeocode(sender: currLocation)
     }
     
     
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError){
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
 
         print(error)
     }
@@ -73,10 +73,25 @@ class CityListViewController: BaseViewController ,UITableViewDataSource,UITableV
             let pm = placemarks! as [CLPlacemark]
             if (pm.count > 0){
                 p = placemarks![0]
-                let arrayforProvince:Array = (p?.name!.componentsSeparatedByString("省"))!
+//                let arrayforProvince:Array = (p?.name!.componentsSeparatedByString("省"))!
+                
+                
+                guard p != nil
+                    else {
+                    return
+                }
+                
+                
+        let arrayforProvince:[String] = (p!.name?.components(separatedBy:"省"))!
+
+                
                 let city:String = arrayforProvince.last!
-                let  arrayforcity:Array = city.componentsSeparatedByString("市")
+
+                let  arrayforcity:[String] = (city.components(separatedBy:("市")))
+                
                 self.currentCityLabel?.text = "    " + (arrayforcity.first)!
+                
+                
             }else{
                 print("No Placemarks!")
             }
@@ -88,14 +103,23 @@ class CityListViewController: BaseViewController ,UITableViewDataSource,UITableV
         title = "选择城市"
         
         locationManager = CLLocationManager()
-        if self.locationManager.respondsToSelector("requestAlwaysAuthorization") {
-            print("requestAlwaysAuthorization")
-            if #available(iOS 8.0, *) {
-                self.locationManager.requestAlwaysAuthorization()
-            } else {
-                // Fallback on earlier versions
-            }
-        }
+//        if self.locationManager.responds(to: #selector("requestAlwaysAuthorization")) {
+//            print("requestAlwaysAuthorization")
+//            if #available(iOS 8.0, *) {
+//                self.locationManager.requestAlwaysAuthorization()
+//            } else {
+//                // Fallback on earlier versions
+//            }
+//        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
         locationManager.delegate = self;
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.distanceFilter = kCLLocationAccuracyKilometer
@@ -109,90 +133,103 @@ class CityListViewController: BaseViewController ,UITableViewDataSource,UITableV
         if((currentCityLabel?.text?.isEmpty) == nil){
             return
         }
-        let city:String = ((currentCityLabel?.text)! as NSString).substringFromIndex(4)
-        self.delegate?.ChangeCityWithCityName(city)
-        self.navigationController?.popViewControllerAnimated(true)
+        let city:String = ((currentCityLabel?.text)! as NSString).substring(from: 4)
+        delegate?.ChangeCityWithCityName(cityName: city)
+        navigationController?.popViewController(animated: true)
     }
     private func initUI(){
         
         let headerLabel = UILabel()
-        headerLabel.frame = CGRectMake(0, kNavbarHeight, kScreenWidth, 20)
+        headerLabel.frame = CGRect(x: 0, y: kNavbarHeight, width: kScreenWidth, height: 20)
+
+        
         headerLabel.text = "   当前城市"
         headerLabel.backgroundColor = kBackGroundColor
-        self.view.addSubview(headerLabel)
+        view.addSubview(headerLabel)
         
-        currentCityLabel = UILabel()
-        currentCityLabel!.frame = CGRectMake(headerLabel.frame.origin.x, headerLabel.frame.origin.y+headerLabel.frame.size.height, headerLabel.frame.size.width, headerLabel.frame.size.height+10)
-        currentCityLabel!.backgroundColor = UIColor.whiteColor()
-        currentCityLabel?.textColor = UIColor.orangeColor()
-        currentCityLabel?.userInteractionEnabled = true
-        self.view .addSubview(currentCityLabel!)
+        currentCityLabel = UILabel(frame: CGRect(x: headerLabel.frame.origin.x, y: headerLabel.frame.origin.y+headerLabel.frame.size.height, width: headerLabel.frame.size.width, height: headerLabel.frame.size.height+10))
         
-        let tap = UITapGestureRecognizer(target:self, action: "tapToChangeCity:")
+        currentCityLabel!.backgroundColor = UIColor.white
+        currentCityLabel?.textColor = UIColor.orange
+        currentCityLabel?.isUserInteractionEnabled = true
+        view.addSubview(currentCityLabel!)
+        
+        let tap = UITapGestureRecognizer(target:self, action: Selector(("tapToChangeCity:")))
         currentCityLabel?.addGestureRecognizer(tap)
         
-        friendsTable = UITableView(frame: CGRectMake((currentCityLabel?.frame.origin.x)!, (currentCityLabel?.frame.origin.y)!+(currentCityLabel?.frame.size.height)!, (currentCityLabel?.frame.size.width)!, (kScreenHeight-(currentCityLabel?.frame.size.height)!)-headerLabel.frame.size.height), style:.Plain)
+        
+        friendsTable = UITableView(frame: CGRect(x: (currentCityLabel?.frame.origin.x)!, y: (currentCityLabel?.frame.origin.y)!+(currentCityLabel?.frame.size.height)!, width: (currentCityLabel?.frame.size.width)!, height: (kScreenHeight-(currentCityLabel?.frame.size.height)!)-headerLabel.frame.size.height), style:.plain)
+
+        
         friendsTable!.delegate = self
         friendsTable!.dataSource = self
-        friendsTable!.registerClass(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        friendsTable!.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.view.addSubview(friendsTable!)
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int{
+    func numberOfSections(in tableView: UITableView) -> Int {
         return (keys?.count)!
+
     }
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+    
+  
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         let keys_:NSArray = NSArray(array: keys!);
-        let key = keys_.objectAtIndex(section)
+        let key = keys_.object(at: section)
         
-        let temp:NSArray = (cities?.objectForKey(key))! as! NSArray
+        let temp:NSArray = (cities?.object(forKey: key))! as! NSArray
         return temp.count
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell{
-         let cell = tableView .dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+         let cell = tableView .dequeueReusableCell(withIdentifier: "cell", for: indexPath) as UITableViewCell
         let keysTemp:NSArray = NSArray(array: keys!);
 
-        let key = keysTemp.objectAtIndex(indexPath.section)
+        let key = keysTemp.object(at: indexPath.section)
         
-        let temp:NSArray = (cities?.objectForKey(key))! as! NSArray
+        let temp:NSArray = (cities?.object(forKey: key))! as! NSArray
         
-        cell.textLabel?.text = temp.objectAtIndex(indexPath.row) as? String
+        cell.textLabel?.text = temp.object(at: indexPath.row) as? String
         return cell
     }
-    func sectionIndexTitlesForTableView(tableView: UITableView) -> [String]? {
-        return keys
-    }
+   
 
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return keys
+
+    }
     
 //    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 //
 //    }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerLabel  = UILabel(frame: CGRectMake(0, 0, tableView.frame.size.width, 20))
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let headerLabel  = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: 20))
+
+        
         headerLabel.backgroundColor = kBackGroundColor
         let keys_:NSArray = NSArray(array: keys!);
         
-        let key = keys_.objectAtIndex(section)
+        let key = keys_.object(at: section)
         let textString = "    "+(key as? String)!;
         headerLabel.text = textString
         return headerLabel
     }
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 20;
     }
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         let keysTemp:NSArray = NSArray(array: keys!);
         
-        let key = keysTemp.objectAtIndex(indexPath.section)
+        let key = keysTemp.object(at: indexPath.section)
         
-        let temp:NSArray = (cities?.objectForKey(key))! as! NSArray
+        let temp:NSArray = (cities?.object(forKey: key))! as! NSArray
         
-        self.delegate?.ChangeCityWithCityName(temp.objectAtIndex(indexPath.row) as! String)
-        self.navigationController?.popViewControllerAnimated(true)
+        self.delegate?.ChangeCityWithCityName(cityName: temp.object(at: indexPath.row) as! String)
+        navigationController?.popViewController(animated: true)
         
     }
     override func didReceiveMemoryWarning() {

@@ -43,18 +43,23 @@ class AliPayViewController: BaseViewController {
     
     private func initTopView(){
       topView = {
-            let tempTopView = UIView(frame: CGRectMake(0, kNavbarHeight, kScreenWidth, 2*kNavbarHeight))
+        let tempTopView = UIView(frame: CGRect(x: 0, y: kNavbarHeight, width: kScreenWidth, height: 2*kNavbarHeight))
+
             tempTopView.backgroundColor = kThemeColor
-            self.view.addSubview(tempTopView)
+            view.addSubview(tempTopView)
             return tempTopView
             }()
         let imageViewWidth:CGFloat = (kScreenWidth/4)
-        for index:Int in 0...3{
+        for index in 0...3{
             let imageView = UIImageView()
-            imageView.tintColor = UIColor.whiteColor()
-            imageView.userInteractionEnabled = true
-            imageView.frame = CGRectMake(imageViewWidth * CGFloat(index), 0, imageViewWidth, (topView?.frame.size.height)!)
-            let titleLabel = UILabel(frame: CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y+(topView?.frame.size.height)!*2/3, imageViewWidth, 30))
+            imageView.tintColor = UIColor.white
+            imageView.isUserInteractionEnabled = true
+            imageView.frame =  CGRect(x: imageViewWidth * CGFloat(index), y: 0, width: imageViewWidth, height: (topView?.frame.size.height)!)
+            
+            let titleLabel = UILabel(frame:CGRect(x: imageView.frame.origin.x, y: imageView.frame.origin.y+(topView?.frame.size.height)!*2/3, width: imageViewWidth, height: 30))
+
+            
+            
             if index==0{
                 imageView.image = UIImage(named: "scan@2x.png")
                 titleLabel.text = "扫一扫"
@@ -68,11 +73,15 @@ class AliPayViewController: BaseViewController {
                 imageView.image = UIImage(named: "scanStatic@2x.png")
                 titleLabel.text = "附近"
             }
-            titleLabel.textAlignment = NSTextAlignment.Center
-            titleLabel.textColor = UIColor.whiteColor()
+            titleLabel.textAlignment = .center
+            titleLabel.textColor = UIColor.white
             imageView.tag = index
-            imageView.contentMode = UIViewContentMode.Center;
-          let tap = UITapGestureRecognizer(target: self, action: "topButtonClick:")
+            imageView.contentMode = .center;
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(topButtonClick(sender:)))
+
+            
+            
             imageView .addGestureRecognizer(tap)
             topView?.addSubview(imageView)
             topView?.addSubview(titleLabel)
@@ -87,8 +96,8 @@ class AliPayViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let leftItem = UIBarButtonItem(title: "账单", style: UIBarButtonItemStyle.Plain, target: self, action: "showMyOrder")
-        self.navigationItem.leftBarButtonItem = leftItem
+        let leftItem = UIBarButtonItem(title: "账单", style: UIBarButtonItemStyle.plain, target: self, action: #selector(showMyOrder))
+        navigationItem.leftBarButtonItem = leftItem
             initTopView()
 
     }
@@ -100,14 +109,6 @@ class AliPayViewController: BaseViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

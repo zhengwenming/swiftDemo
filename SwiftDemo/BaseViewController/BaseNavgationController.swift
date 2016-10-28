@@ -18,13 +18,13 @@ class BaseNavgationController: UINavigationController,UINavigationControllerDele
         
         
         
-        let textAttributes = [NSFontAttributeName:UIFont.systemFontOfSize(18),NSForegroundColorAttributeName:UIColor.whiteColor()]
+        let textAttributes = [NSFontAttributeName:UIFont.systemFont(ofSize: 18),NSForegroundColorAttributeName:UIColor.white]
         
         UINavigationBar.appearance().titleTextAttributes = textAttributes
-        UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+        UINavigationBar.appearance().tintColor = UIColor.white
         UINavigationBar.appearance().barTintColor = kThemeColor
-        UINavigationBar.appearance().translucent = true
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent;
+        UINavigationBar.appearance().isTranslucent = true
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent;
     }
 //    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
 //        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -40,7 +40,7 @@ class BaseNavgationController: UINavigationController,UINavigationControllerDele
 
     }
     
-    override func pushViewController(viewController: UIViewController, animated: Bool) {
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         if(self.viewControllers.count>0){
             viewController.hidesBottomBarWhenPushed = true
         }

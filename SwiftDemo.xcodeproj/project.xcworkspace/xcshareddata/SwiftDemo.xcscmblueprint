@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "017AAC3247ECE016F8C61DBE59AA37AEF5A22F66",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "1EEB23244A8CA920AFC1918D04BBF6CB0D6BF90F" : 0,
+    "017AAC3247ECE016F8C61DBE59AA37AEF5A22F66" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "92DA62EC-97CF-4B65-BFC4-EA067020F77F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "1EEB23244A8CA920AFC1918D04BBF6CB0D6BF90F" : "",
+    "017AAC3247ECE016F8C61DBE59AA37AEF5A22F66" : "swiftDemo\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SwiftDemo",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SwiftDemo.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/zhengwenming\/swiftDemo.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "017AAC3247ECE016F8C61DBE59AA37AEF5A22F66"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/zhengwenming\/WMPlayer.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "1EEB23244A8CA920AFC1918D04BBF6CB0D6BF90F"
+    }
+  ]
+}
